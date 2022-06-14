@@ -1,0 +1,127 @@
+﻿@model Octo1.Models.TbCliente
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+
+<h1>Inserir</h1>
+
+<h4>Cliente</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" id="familyForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" maxlength="80" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tipo" class="control-label"></label><br />
+                <label class="form-check-label">
+                    @Html.RadioButtonFor(model => model.Tipo, "True")
+                    Física
+                    @Html.RadioButtonFor(model => model.Tipo, "False")
+                    Jurídica
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="CpfCnpj" class="control-label">CPF/CNPJ</label>
+                <input asp-for="CpfCnpj" class="form-control" maxlength="14" />
+                <span asp-validation-for="CpfCnpj" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RgIe" class="control-label">RG/IE</label>
+                <input asp-for="RgIe" class="form-control" maxlength="14" />
+                <span asp-validation-for="RgIe" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" maxlength="80" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataNascFund" class="control-label">Data Nascimento / Fundação</label>
+                <input asp-for="DataNascFund" class="form-control" />
+                <span asp-validation-for="DataNascFund" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataCadastro" class="control-label"> Data Cadastro</label>
+                <input asp-for="DataCadastro" class="form-control" />
+                <span asp-validation-for="DataCadastro" class="text-danger"></span>
+            </div>
+
+
+
+            <div class="form-group">
+                <label asp-for="DataCadastro" class="control-label">Telefones</label>
+
+                <div v-for="(child, index) in telefones"
+                     v-bind:key="telefones[index]">
+                    <div>
+                        <label asp-for="TbTelefone" class="control-label">DDD:</label>
+                        <input :name="'telefone['+index+']'" v-model="telefones[index].ddd" />
+                    </div>
+                    <div>
+                        <label asp-for="TbTelefone" class="control-label">Número:</label>
+                        <input :name="'telefone['+index+']'" v-model="telefones[index].telefone" />
+                    </div>
+
+                    <label asp-for="TbTelefone" class="control-label">Tipo:</label>
+                    <select v-model="telefones[index].tipo">
+                        <option>
+                            Celular
+                        </option>
+                        <option>
+                            Residencial
+                        </option>
+                        <option>
+                            Comercial
+                        </option>
+                    </select>
+
+                    <a v-on:click="telefones.splice(index,1)">Apagar</a><br>
+
+                </div>
+                <button type="button" v-on:click="telefones.push({ddd: '', telefone: '' , tipo: ''})">+</button>
+
+            </div>
+
+            <ul id="familyForm">
+                <li v-for="(item, index) in telefones">
+                    {{ item.ddd }} - {{ item.telefone }} - {{ item.tipo }}
+                </li>
+            </ul>
+
+
+
+
+
+
+            <div class="form-group">
+                <input type="submit" value="Inserir" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Voltar</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.0-alpha.6/vue.min.js"></script>
+<script>
+    new Vue({
+        el: '#familyForm',
+        data: {
+            telefones: [
+                { ddd: '', telefone: '', tipo: '' }]
+        },
+    })
+</script>
